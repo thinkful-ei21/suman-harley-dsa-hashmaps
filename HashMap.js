@@ -11,7 +11,7 @@ class HashMap{
     let hash = 5381;
     for(let i=0; i< string.length; i++){
       hash = (hash << 5) + hash + string.charCodeAt(i);
-      hash = hash & hash; 
+      hash = hash & hash; //111001   111001
     }
     return hash >>> 0;    
   }
@@ -30,8 +30,31 @@ class HashMap{
     this.length++;
   }
 
-  //findSlot
+  _findSlot(key) {
+    const hash = HashMap._hashString(key);
+    const start = hash % this._capacity;
+
+    for (let i = start; i < start + this._capacity; i++) {
+      const index = i % this._capacity;
+      const slot = this._slots[index];
+      if (slot === undefined || (slot.key == key && !slot.deleted)) {
+        return index;
+      }
+    }
+  }
   
+  _resize(size) {
+    const oldSlots = this._slots;
+    this._capacity = size;
+    this.length = 0;
+    this._slots = [];
+
+    for (const slot of oldSlots) {
+      if (slot !== undefined) {
+        this.set(slot.key, slot.value);
+      }
+    }
+  }
 
 }
 
