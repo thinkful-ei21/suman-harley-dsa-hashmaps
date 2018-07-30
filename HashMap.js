@@ -56,7 +56,27 @@ class HashMap{
     }
   }
 
+  get(key){
+    const index = this._findSlot(key);
+    if(this._slots[index] === undefined){
+      throw new Error('key error');
+    }
+    return this._slots[index].value;
+  }
+
+  remove(key){
+    const index = this._findSlot(key);
+    const slot = this._slots[index];
+    if( slot === undefined){
+      throw new Error('Key error');
+    }
+    slot.deleted = true;
+    this.length --;
+    this._deleted++;
+  }
 }
 
 HashMap.MAX_LOAD_RATIO = 0.9;
 HashMap.SIZE_RATIO = 3;
+
+module.exports = HashMap;
