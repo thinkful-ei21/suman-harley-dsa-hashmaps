@@ -1,21 +1,43 @@
 'use strict';
 const HashMap = require('./HashMap');
 const testString = 'racecar';
-let pall = new HashMap();
-let keys = [];
-for(let i=0; i< testString.length; i++){
-  if(!keys.includes(testString[i])){
-    keys.push(testString[i]);
+
+
+function palindrome(string) {
+  let pal = new HashMap();
+  string = string.toLowerCase();
+  for(let i=0; i< string.length; i++){
+    try{
+      let count = pal.get(string[i]);
+      pal.set(string[i],++count);    
+    }catch(e){
+      pal.set(string[i],1);    
+    }  
   }
-  try{
-    let count = pall.get(testString[i]);
-    pall.set(testString[i],count++);    
-  }catch(error){
-    pall.set(testString[i],1);    
-  }  
+
+  //console.log(pal);
+
+  let oneOdd = false;
+  
+  for(let i=0; i< string.length; i++){
+    try{
+      let count = pal.get(string[i]);
+      if (count % 2 === 1) {
+        if(!oneOdd) {
+          oneOdd = true;
+        } else {
+          return false;
+        }
+      } else {
+        pal.remove(string[i]);
+      }  
+    }catch(e){
+      continue;   
+    }  
+  }
+
+  return true;
 }
 
-let pallindrome = 
-
-
-          
+console.log(palindrome('acecaRr'));
+console.log(palindrome('north'));
